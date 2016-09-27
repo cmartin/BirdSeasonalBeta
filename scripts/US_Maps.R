@@ -17,49 +17,57 @@ all_states <- all_states[all_states$region != "district of columbia",]
 
 Total <- merge(all_states, res, by = "region")
 
-p <- ggplot()
-p <- p + geom_polygon(
+p1 <- ggplot()
+p1 <- p1 + geom_polygon(
   data = Total,
   aes(x = long, y = lat, group = group, fill = Total$alpha),
   colour = "white"
 ) +
   scale_fill_continuous(low = "thistle2", high = "darkred", guide = "colorbar")
 
-P1 <- p + theme_bw() + labs(fill = "Alpha diversity"
-                             ,title = "Bird diversity in the continental US", x = "", y = "")
-P1 + scale_y_continuous(breaks = c()) +
+p1 <- p1+ theme_bw() + labs(fill = "Alpha"
+                            ,title = "Bird diversity in the continental US"
+                            ,x = "", y = "")
+p1 <- p1 + scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
 
 #########
 
-p <- ggplot()
-p <- p + geom_polygon(
+p2 <- ggplot()
+p2 <- p2 + geom_polygon(
   data = Total,
   aes(x = long, y = lat, group = group, fill = Total$gamma),
   colour = "white"
 ) +
   scale_fill_continuous(low = "thistle2", high = "darkgreen", guide = "colorbar")
 
-P1 <- p + theme_bw() + labs(fill = "Gamma diversity"
-                            ,title = "Bird diversity in the continental US", x = "", y = "")
-P1 + scale_y_continuous(breaks = c()) +
+p2 <- p2 + theme_bw() + labs(fill = "Gamma"
+                            #,title = "Bird diversity in the continental US"
+                            , x = "", y = "")
+p2 <- p2 + scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
 
 
 ########
 
-p <- ggplot()
-p <- p + geom_polygon(
+p3 <- ggplot()
+p3 <- p3 + geom_polygon(
   data = Total,
   aes(x = long, y = lat, group = group, fill = Total$beta),
   colour = "white"
 ) +
   scale_fill_continuous(low = "thistle2", high = "darkblue", guide = "colorbar")
 
-P1 <- p + theme_bw() + labs(fill = "Seasonal beta\n diversity"
-                            ,title = "Bird diversity in the continental US", x = "", y = "")
-P1 + scale_y_continuous(breaks = c()) +
+p3 <- p3 + theme_bw() + labs(fill = "Beta"
+                            #,title = "Bird diversity in the continental US"
+                            , x = "", y = "")
+p3 <- p3 + scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
+
+#######
+
+source("lib/multiplot.R")
+multiplot(p1, p2, p3, cols = 1)
