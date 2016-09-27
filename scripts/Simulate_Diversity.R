@@ -2,6 +2,7 @@ rm(list = ls())
 library(rebird)
 library(vegan)
 library(purrr)
+library(stringr)
 
 data(state)
 
@@ -16,6 +17,12 @@ simulate_diversity_for_state <- function(state_code, country_code = "US") {
 
   colnames(freqs) <- colnames(res)[-1]
   rownames(freqs) <- res$comName[-1]
+
+  to_remove <- "sp\\.|/|domestic|hybrid|Domestic"
+
+  sp_names <- rownames(freqs)
+
+  freqs <- freqs[!str_detect(sp_names,to_remove),]
 
   sim_obs <- t(matrix(
     data = rbinom(length(freqs),8,freqs),
