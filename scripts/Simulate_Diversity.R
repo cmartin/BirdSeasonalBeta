@@ -5,8 +5,10 @@ library(purrr)
 
 data(state)
 
-simulate_diversity_for_state <- function(state_code) {
-  res <- ebirdfreq("states",paste0("US-",state_code), long = FALSE)
+simulate_diversity_for_state <- function(state_code, country_code = "US") {
+
+  location <- paste0(country_code,"-",state_code)
+  res <- ebirdfreq("states",location, long = FALSE)
 
   freqs <- as.matrix(
     res[-1,-1]
@@ -25,6 +27,7 @@ simulate_diversity_for_state <- function(state_code) {
   alpha <- mean(specnumber(sim_obs))
   gamma <- specnumber(sim_obs, c(1))
   list(
+    location = location,
     alpha = alpha,
     gamma = as.numeric(gamma),
     beta = gamma / alpha,
@@ -36,3 +39,5 @@ simulate_diversity_for_state <- function(state_code) {
 }
 
 res <- map_df(state.abb,simulate_diversity_for_state)
+
+save(res,file = "data/US_Diversity.RData")
