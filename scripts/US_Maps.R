@@ -30,3 +30,36 @@ P1 <- p + theme_bw() + labs(fill = "Alpha diversity"
 P1 + scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
+
+#########
+
+p <- ggplot()
+p <- p + geom_polygon(
+  data = Total,
+  aes(x = long, y = lat, group = group, fill = Total$gamma),
+  colour = "white"
+) +
+  scale_fill_continuous(low = "thistle2", high = "darkgreen", guide = "colorbar")
+
+P1 <- p + theme_bw() + labs(fill = "Gamma diversity"
+                            ,title = "Bird diversity in the continental US", x = "", y = "")
+P1 + scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  theme(panel.border = element_blank())
+
+
+########
+
+p <- ggplot()
+p <- p + geom_polygon(
+  data = Total,
+  aes(x = long, y = lat, group = group, fill = Total$beta),
+  colour = "white"
+) +
+  scale_fill_continuous(low = "thistle2", high = "darkblue", guide = "colorbar")
+
+P1 <- p + theme_bw() + labs(fill = "Seasonal beta\n diversity"
+                            ,title = "Bird diversity in the continental US", x = "", y = "")
+P1 + scale_y_continuous(breaks = c()) +
+  scale_x_continuous(breaks = c()) +
+  theme(panel.border = element_blank())
