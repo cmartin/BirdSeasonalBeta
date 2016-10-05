@@ -40,7 +40,8 @@ simulate_diversity_for_state <- function(state_code, country_code = "US") {
     beta = gamma / alpha,
     absolute_turnover = gamma - alpha,
     whittaker = gamma / alpha - 1,
-    proportional = 1 - alpha / gamma
+    proportional = 1 - alpha / gamma,
+    var_alpha = var(specnumber(sim_obs))
   )
 
 }

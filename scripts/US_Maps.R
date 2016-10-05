@@ -1,5 +1,3 @@
-rm(list = ls())
-
 # vs http://www.biodiversitymapping.org/USA_birds.htm#thumb
 
 # https://gist.github.com/cdesante/4252133
