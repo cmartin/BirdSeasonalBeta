@@ -3,8 +3,15 @@ library(rebird)
 library(vegan)
 library(purrr)
 library(stringr)
+library(memoise)
 
 data(state)
+
+# Cache ebird data locally for faster simulations
+m_ebird_freqs <- memoise(
+  ebirdfreq,
+  cache = cache_filesystem("cache/freqs")
+)
 
 simulate_diversity_for_state <- function(
   state_code,
@@ -13,7 +20,7 @@ simulate_diversity_for_state <- function(
 ) {
 
   location <- paste0(country_code,"-",state_code)
-  res <- ebirdfreq("states",location, long = FALSE)
+  res <- m_ebird_freqs("states",location, long = FALSE)
 
   freqs <- as.matrix(
     res[-1,-1]
