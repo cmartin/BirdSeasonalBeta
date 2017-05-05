@@ -2,10 +2,13 @@
 
 # https://gist.github.com/cdesante/4252133
 
+# devtools::install_github("baptiste/egg")
+
 rm(list = ls())
 library(stringr)
 library(ggplot2)
 library(purrr)
+library(egg)
 
 load("data/US_Diversity.RData")
 
@@ -16,7 +19,7 @@ all_states <- all_states[all_states$region != "district of columbia",]
 
 Total <- merge(all_states, res, by = "region")
 
-pwalk(list(
+plots <- pmap(list(
   div_var = c("alpha","gamma", "beta"),
   fig_name_suffix = c("a","b","c"),
   high_color = c("darkred", "darkgreen", "darkblue")
@@ -33,8 +36,11 @@ pwalk(list(
     scale_x_continuous(breaks = c()) +
     theme(panel.border = element_blank()) +
     ggtitle(fig_name_suffix) + theme(plot.title = element_text(hjust = 0))
-
-  ggsave(paste0("results/Fig1", fig_name_suffix ,".eps"), width = 0.66*8, height = 0.33*11)
-
 }
 )
+
+combined_plots <- ggarrange(
+  plots[[1]],plots[[2]], plots[[3]],
+  ncol = 1
+)
+ggsave(paste0("results/Fig1.eps"), combined_plots, width = 0.66*8, height = 0.33*11*3)
