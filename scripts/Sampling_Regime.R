@@ -3,13 +3,14 @@ library(stringr)
 load("data/US_Diversity.RData")
 
 res %>%
-  group_by(n_checklists_per_week) %>%
   mutate(location = str_replace(location,"US-","")) %>%
-  arrange(desc(beta)) %>%
+  gather(key = "diversity_metric", value = "value", alpha,gamma,beta) %>%
+  group_by(n_checklists_per_week,diversity_metric) %>%
+  arrange(desc(value)) %>%
   mutate(rank = row_number()) %>%
   ungroup %>%
   ggplot(aes(x = n_checklists_per_week^.25, y = rank)) +
-  geom_line(aes(color = location)) +
+  geom_line(aes(color = location), size = 1) +
   scale_y_reverse() +
   scale_x_continuous(
     breaks = unique(res$n_checklists_per_week)^.25,
@@ -17,7 +18,10 @@ res %>%
   ) +
   labs(
     x = "Simulated checklists per week",
-    y = "Beta diversity rank",
+    y = "Rank",
     color = "US State"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  facet_wrap(~diversity_metric) +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(nrow = 3))
