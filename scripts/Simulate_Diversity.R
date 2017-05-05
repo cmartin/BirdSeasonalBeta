@@ -6,7 +6,11 @@ library(stringr)
 
 data(state)
 
-simulate_diversity_for_state <- function(state_code, country_code = "US") {
+simulate_diversity_for_state <- function(
+  state_code,
+  country_code = "US",
+  n_checklists_per_week = 8
+) {
 
   location <- paste0(country_code,"-",state_code)
   res <- ebirdfreq("states",location, long = FALSE)
@@ -25,7 +29,7 @@ simulate_diversity_for_state <- function(state_code, country_code = "US") {
   freqs <- freqs[!str_detect(sp_names,to_remove),]
 
   sim_obs <- t(matrix(
-    data = rbinom(length(freqs),8,freqs),
+    data = rbinom(length(freqs),n_checklists_per_week,freqs),
     ncol = ncol(freqs),
     nrow = nrow(freqs),
     dimnames = list(rownames(freqs), colnames(freqs))
