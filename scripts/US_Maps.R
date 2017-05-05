@@ -11,6 +11,7 @@ library(purrr)
 library(egg)
 
 load("data/US_Diversity.RData")
+res <- res[res$n_checklists_per_week == 8,]
 
 all_states <- map_data("state")
 res$region <- str_to_lower(state.name)

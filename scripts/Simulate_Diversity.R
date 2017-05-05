@@ -52,11 +52,19 @@ simulate_diversity_for_state <- function(
     absolute_turnover = gamma - alpha,
     whittaker = gamma / alpha - 1,
     proportional = 1 - alpha / gamma,
-    var_alpha = var(specnumber(sim_obs))
+    var_alpha = var(specnumber(sim_obs)),
+    n_checklists_per_week = n_checklists_per_week
   )
 
 }
 
-res <- map_df(state.abb,simulate_diversity_for_state)
+res <- pmap_df(
+  expand.grid(
+    state_code = state.abb,
+    n_checklists_per_week = c(2,8,32,128,512,2048),
+    stringsAsFactors = FALSE
+  ),
+  simulate_diversity_for_state
+)
 
 save(res,file = "data/US_Diversity.RData")
