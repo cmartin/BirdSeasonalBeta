@@ -4,13 +4,21 @@
 
 # devtools::install_github("baptiste/egg")
 
-rm(list = ls())
+library(tidyverse)
 library(stringr)
-library(ggplot2)
 library(purrr)
 library(egg)
 
-load("data/US_Diversity.RData")
+#load("data/US_Diversity.RData")
+res <- read_csv("data/Simulation_Results.csv") %>%
+  group_by(location, n_checklists_per_week) %>%
+  summarise_each(
+    funs(mean),
+    alpha,
+    beta,
+    gamma
+  )
+
 res <- res[res$n_checklists_per_week == 8,]
 
 all_states <- map_data("state")
