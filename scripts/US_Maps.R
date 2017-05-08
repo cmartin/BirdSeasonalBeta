@@ -17,9 +17,9 @@ res <- read_csv("data/Simulation_Results.csv") %>%
     alpha,
     beta,
     gamma
-  )
-
-res <- res[res$n_checklists_per_week == 8,]
+  ) %>%
+  ungroup() %>%
+  filter(n_checklists_per_week == 8)
 
 all_states <- map_data("state")
 res$region <- str_to_lower(state.name)
