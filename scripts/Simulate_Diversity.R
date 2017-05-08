@@ -6,6 +6,8 @@ library(stringr)
 library(memoise)
 library(readr)
 
+source("lib/CleanFreqs.R")
+
 data(state)
 
 # Cache ebird data locally for faster simulations
@@ -23,19 +25,7 @@ simulate_diversity_for_state <- function(
 
   location <- paste0(country_code,"-",state_code)
   res <- m_ebird_freqs("states",location, long = FALSE)
-
-  freqs <- as.matrix(
-    res[-1,-1]
-  )
-
-  colnames(freqs) <- colnames(res)[-1]
-  rownames(freqs) <- res$comName[-1]
-
-  to_remove <- "sp\\.|/|domestic|hybrid|Domestic"
-
-  sp_names <- rownames(freqs)
-
-  freqs <- freqs[!str_detect(sp_names,to_remove),]
+  freqs <- clean_freqs(res)
 
   sim_obs <- t(matrix(
     data = rbinom(length(freqs),n_checklists_per_week,freqs),
