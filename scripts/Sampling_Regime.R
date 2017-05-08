@@ -1,7 +1,8 @@
 library(tidyverse)
 library(stringr)
 
-res <- read_csv("data/Simulation_Results.csv")
+res <- read_csv("data/Simulation_Results.csv") %>%
+  filter(!(location %in% c("US-HI", "US-AK")))
 
 se <- function(x) {
   sd(x)/sqrt(length(x))
