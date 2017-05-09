@@ -12,8 +12,24 @@ rownames(nelson) <- c("Chestnut", "Hickory", "Chestnut oak", "Northern red oak",
 colnames(nelson) <- c("1934", "1953")
 colSums(nelson)
 
-horn <- function(m) {
-  0
+# Implementation of the Horn index of similarity
+horn <- function(site1, site2) {
+
+#  site1 <- nelson[,1]
+#  site2 <- nelson[,2]
+
+  a <- sum((site1 + site2) * log10(site1 + site2))
+  b <- sum(site1*log10(site1))
+  c <- sum(site2*log10(site2))
+
+  d2 <- sum(site1) + sum(site2)
+
+  d <- d2  * log10(d2)
+  e <- sum(site1)*log10(sum(site1))
+  f <- sum(site2)*log10(sum(site2))
+
+  (a - b - c) / (d - e - f)
+
 }
 
-expect_equal(horn(nelson), 0.7)
+expect_equal(horn(nelson[,1], nelson[,2]), 0.7, tolerance = 0.001)

@@ -27,7 +27,7 @@ distances <- map_df(
 
 all_states <- map_data("state")
 Total <- merge(
-  all_states[all_states$region != "district of columbia",],
+  all_states,
   distances %>%
     merge(
       tibble(
@@ -35,17 +35,16 @@ Total <- merge(
         location = state.abb
       )
     )
-)
+) %>% arrange(order)
 
-ggplot() +
+ggplot(Total) +
   geom_polygon(
-    data = Total,
-    aes(x = long, y = lat, group = region, fill = d),
+    aes(x = long, y = lat, group = group, fill = d),
     colour = "white"
   ) +
   scale_fill_continuous(low = "thistle2", high = "blue", guide = "colorbar") +
   theme_bw() +
-  labs(fill = str_to_title("Horn-Morista\nmean"), x = "", y = "") +
+  labs(fill = str_to_title("Morisita-Horn"), x = "", y = "") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank()) +
