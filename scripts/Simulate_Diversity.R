@@ -1,31 +1,22 @@
 rm(list = ls())
+library(tidyverse)
 library(rebird)
 library(vegan)
 library(purrr)
 library(stringr)
 library(memoise)
-library(readr)
 
-source("lib/CleanFreqs.R")
+source("lib/EBird_Tools.R")
 
 data(state)
 
-# Cache ebird data locally for faster simulations
-m_ebird_freqs <- memoise(
-  ebirdfreq,
-  cache = cache_filesystem("cache/freqs")
-)
-
 simulate_diversity_for_state <- function(
   state_code,
-  country_code = "US",
   n_checklists_per_week = 8,
   replicate_number = 1
 ) {
 
-  location <- paste0(country_code,"-",state_code)
-  res <- m_ebird_freqs("states",location, long = FALSE)
-  freqs <- clean_freqs(res)
+  freqs <- calculate_frequencies(state_code)
 
   sim_obs <- t(matrix(
     data = rbinom(length(freqs),n_checklists_per_week,freqs),
@@ -37,7 +28,7 @@ simulate_diversity_for_state <- function(
   alpha <- mean(specnumber(sim_obs))
   gamma <- specnumber(sim_obs, c(1))
   list(
-    location = location,
+    location = paste0("US-",state_code),
     alpha = alpha,
     gamma = as.numeric(gamma),
     beta = gamma / alpha,
@@ -54,8 +45,10 @@ simulate_diversity_for_state <- function(
 res <- pmap_df(
   expand.grid(
     state_code = state.abb,
-    n_checklists_per_week = c(2,8,32,128,512,2048),
-    replicate_number = 1:20,
+    # n_checklists_per_week = c(2,8,32,128,512,2048),
+    # replicate_number = 1:20,
+    n_checklists_per_week = c(2,8),
+    replicate_number = 1:2,
     stringsAsFactors = FALSE
   ),
   simulate_diversity_for_state

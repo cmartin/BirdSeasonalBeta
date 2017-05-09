@@ -3,29 +3,13 @@ library(memoise)
 library(rebird)
 library(stringr)
 library(purrr)
-source("lib/CleanFreqs.R")
+source("lib/EBird_Tools.R")
 
 data(state)
 
-m_ebird_freqs <- memoise(
-  ebirdfreq,
-  cache = cache_filesystem("cache/freqs")
-)
-
-calculate_frequencies <- function(location) {
-  res <- m_ebird_freqs("states",paste0("US-",location), long = FALSE)
-  freqs <- clean_freqs(res)
-  tibble(
-    species = rownames(freqs),
-    frequency = as.numeric(rowSums(freqs > 0)/48),
-    location = location
-  )
-
-}
-
 freqs <- map_df(
   state.abb[!state.abb %in% c("HI", "AK")],
-  calculate_frequencies
+  calculate_species_frequencies
 )
 
 freqs %>%
