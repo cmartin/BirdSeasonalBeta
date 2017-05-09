@@ -1,4 +1,3 @@
-rm(list = ls())
 library(tidyverse)
 library(rebird)
 library(vegan)
@@ -45,10 +44,8 @@ simulate_diversity_for_state <- function(
 res <- pmap_df(
   expand.grid(
     state_code = state.abb,
-    # n_checklists_per_week = c(2,8,32,128,512,2048),
-    # replicate_number = 1:20,
-    n_checklists_per_week = c(2,8),
-    replicate_number = 1:2,
+    n_checklists_per_week = c(2,8,32,128,512,2048),
+    replicate_number = 1:20,
     stringsAsFactors = FALSE
   ),
   simulate_diversity_for_state

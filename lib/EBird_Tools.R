@@ -1,3 +1,6 @@
+start_year = 2006
+end_year = 2016
+
 # Clean up ebird frequency matrix into a usable form
 clean_freqs <- function(res) {
   freqs <- as.matrix(
@@ -18,7 +21,13 @@ m_ebird_freqs <- memoise(
 
 # Calculate (and clean) an ebird frequency matrix for a location
 calculate_frequencies <- function(location) {
-  res <- m_ebird_freqs("states",paste0("US-",location), long = FALSE)
+  res <- m_ebird_freqs(
+    "states",
+    paste0("US-",location),
+    long = FALSE,
+    startyear = start_year,
+    endyear = end_year
+  )
   clean_freqs(res)
 }
 
