@@ -4,6 +4,7 @@ library(rebird)
 library(stringr)
 library(vegan)
 source("lib/EBird_Tools.R")
+source("lib/Monthly_Climate.R")
 
 distances <- map_df(
   state.abb,
@@ -23,18 +24,46 @@ distances <- map_df(
   }
 )
 
+# Add meta-data about states
+distances <- distances %>%
+  merge(
+    tibble(
+      region = str_to_lower(state.name),
+      location = state.abb,
+      state_area = state.area, # square miles,
+      log_state_area = log(state_area),
+      latitude = state.center$y,
+      longitude = state.center$x
+    )
+  )
+
+# Fetch climate data about states
+distances <- distances %>%
+  mutate(
+    longitude = ifelse(location == "DE",-75.2,longitude), # nudge delaware at bit out of the ocean
+    jan_temp = monthly_climate_at_point(
+      lat = latitude,
+      lon = longitude,
+      mon = 1,
+      var = "tmean",
+      res = 10
+    ),
+    jul_temp = monthly_climate_at_point(
+      lat = latitude,
+      lon = longitude,
+      mon = 7,
+      var = "tmean",
+      res = 10
+    ),
+    temp_range = jul_temp - jan_temp
+  )
+
 ### Quick map
 
 all_states <- map_data("state")
 Total <- merge(
   all_states,
-  distances %>%
-    merge(
-      tibble(
-        region = str_to_lower(state.name),
-        location = state.abb
-      )
-    )
+  distances
 ) %>% arrange(order)
 
 ggplot(Total) +
@@ -49,3 +78,14 @@ ggplot(Total) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank()) +
   theme(plot.title = element_text(hjust = 0))
+
+distances %>%
+  gather(
+    key = var,
+    value = value,
+    log_state_area:temp_range
+  ) %>%
+  ggplot(aes(x = value,y = d)) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~var, scales = "free_x")
