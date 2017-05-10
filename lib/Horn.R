@@ -13,14 +13,15 @@ colnames(nelson) <- c("1934", "1953")
 colSums(nelson)
 
 # Implementation of the Horn index of similarity
-horn <- function(site1, site2) {
+horn2 <- function(site1, site2) {
 
-#  site1 <- nelson[,1]
-#  site2 <- nelson[,2]
+  k1 <- ifelse(is.infinite(log10(site1)),0,log10(site1))
+  k2 <- ifelse(is.infinite(log10(site2)),0,log10(site2))
+  k3 <- ifelse(is.infinite(log10(site1 + site2)),0,log10(site1 + site2))
 
-  a <- sum((site1 + site2) * log10(site1 + site2))
-  b <- sum(site1*log10(site1))
-  c <- sum(site2*log10(site2))
+  a <- sum((site1 + site2) * k3)
+  b <- sum(site1*k1)
+  c <- sum(site2*k2)
 
   d2 <- sum(site1) + sum(site2)
 
@@ -32,4 +33,8 @@ horn <- function(site1, site2) {
 
 }
 
-expect_equal(horn(nelson[,1], nelson[,2]), 0.7, tolerance = 0.001)
+expect_equal(horn2(nelson[,1], nelson[,2]), 0.7, tolerance = 0.001)
+
+mod_nelson <- nelson
+mod_nelson[1,1] <- 0
+expect_true(!(is.nan(horn2(mod_nelson[,1], mod_nelson[,2]))), "Log of 0 not handled properly")
