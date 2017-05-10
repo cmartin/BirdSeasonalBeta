@@ -11,19 +11,11 @@ distances <- map_df(
   state.abb,
   function(x) {
     f <- calculate_frequencies(x)
-
-    # # Calculate distance matrix
-    # m <- as.matrix(vegdist(t(f), method = "horn")) # Which is Morista-Horn
-    # # Extract distance to neighboring-week
-    # d <- diag(m[-1,])
-
     n <- ncol(f)
     d <- c(rep(NA,n - 1))
     for (i in 1:(n - 1)) {
       d[i] <- 1 - horn2(f[,i],f[,i + 1])
     }
-
-    #plot(d, type = "l")
     list(
       d = mean(d),
       location = x
@@ -31,13 +23,25 @@ distances <- map_df(
   }
 )
 
+# Adding the proportion of resident species in each state
+distances <- distances %>%
+  merge(
+    map_df(
+      state.abb,
+      calculate_species_frequencies
+    ) %>%
+      group_by(location) %>%
+      summarise(prop_resident = sum(frequency == 1) / n()) %>%
+      arrange(prop_resident)
+  )
+
 # Add meta-data about states
 distances <- distances %>%
   merge(
     tibble(
-      region = str_to_lower(state.name),
       location = state.abb,
-      state_area = state.area, # square miles,
+      region = str_to_lower(state.name),
+      state_area = state.area * 2.58999, # square mile to km,
       log_state_area = log(state_area),
       latitude = state.center$y,
       longitude = state.center$x
@@ -65,35 +69,4 @@ distances <- distances %>%
     temp_range = jul_temp - jan_temp
   )
 
-### Quick map
-
-all_states <- map_data("state")
-Total <- merge(
-  all_states,
-  distances
-) %>% arrange(order)
-
-ggplot(Total) +
-  geom_polygon(
-    aes(x = long, y = lat, group = group, fill = d),
-    colour = "white"
-  ) +
-  scale_fill_continuous(low = "thistle2", high = "blue", guide = "colorbar") +
-  theme_bw() +
-  labs(fill = str_to_title("Horn"), x = "", y = "") +
-  scale_y_continuous(breaks = c()) +
-  scale_x_continuous(breaks = c()) +
-  theme(panel.border = element_blank()) +
-  theme(plot.title = element_text(hjust = 0))
-
-distances %>%
-  gather(
-    key = var,
-    value = value,
-    log_state_area:temp_range
-  ) %>%
-  ggplot(aes(x = value,y = d)) +
-  geom_point() +
-  geom_smooth() +
-  facet_wrap(~var, scales = "free_x")
-
+write_csv(distances,"data/distances.csv")
