@@ -12,9 +12,9 @@ ggplot(Total) +
     aes(x = long, y = lat, group = group, fill = d),
     colour = "white"
   ) +
-  scale_fill_continuous(low = "thistle2", high = "blue", guide = "colorbar") +
+  scale_fill_continuous(low = "thistle2", high = "royalblue4", guide = "colorbar") +
   theme_bw() +
-  labs(fill = "Horn", x = "", y = "") +
+  labs(fill = "Beta\ndiversity", x = "", y = "") +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank()) +
