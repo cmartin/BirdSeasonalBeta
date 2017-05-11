@@ -12,8 +12,15 @@ distances %>%
   geom_smooth() +
   facet_wrap(~var, scales = "free_x")
 
+db <- distances %>%
+  dplyr::select(alpha, gamma, prop_resident, log_state_area:temp_range) %>%
+  filter(complete.cases(.))
+
 cor(
-  distances %>%
-    dplyr::select(alpha, gamma, prop_resident, log_state_area:temp_range) %>%
-    filter(complete.cases(.))
+  db,
+  method = "spearman"
 )
+
+pca <- prcomp(db,
+              scale = TRUE)
+biplot(pca)
