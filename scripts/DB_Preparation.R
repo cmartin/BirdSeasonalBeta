@@ -16,9 +16,12 @@ distances <- map_df(
     for (i in 1:(n - 1)) {
       d[i] <- 1 - horn2(f[,i],f[,i + 1])
     }
+
     list(
       d = mean(d),
-      location = x
+      location = x,
+      alpha = mean(specnumber(t(f))),
+      gamma = as.numeric(specnumber(t(f),1))
     )
   }
 )
