@@ -1,6 +1,7 @@
 library(tidyverse)
 library(modelr)
 library(MuMIn)
+library(vegan)
 
 distances <- read_csv("data/distances.csv") %>% filter(complete.cases(.))
 
@@ -48,8 +49,17 @@ p2 <- distances %>%
   geom_point(size = 3) +
   geom_line(aes(y = temp_range_effect - resid), col = "royalblue") +
   theme_minimal() +
-  labs(y = "Change in beta diversity", x = "Annual variation of\nair temperature")
+  labs(y = "Change in beta diversity", x = "Annual temperature range")
 
 library(gridExtra)
 g <- arrangeGrob(p1, p2, nrow = 2)
 ggsave("results/Fig2.eps", g, width = 3, height = 4.5)
+
+
+# How is variance seperated between these components
+varpart(
+  distances$d,
+  ~gamma+I(gamma^2),
+  ~temp_range,
+  data = distances
+)
