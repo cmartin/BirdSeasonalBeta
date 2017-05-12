@@ -20,7 +20,7 @@ p1 <- ggplot(Total) +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank(), legend.text.align = 3) +
-  annotate("text", label = "a", x = -128, y = 49, vjust = 1, size = 5)
+  annotate("text", label = "(a)", x = -128, y = 49, vjust = 1, size = 5)
 
 p2 <- ggplot(Total) +
   geom_polygon(
@@ -33,7 +33,7 @@ p2 <- ggplot(Total) +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank()) +
-  annotate("text", label = "b", x = -128, y = 49, vjust = 1, size = 5)
+  annotate("text", label = "(b)", x = -128, y = 49, vjust = 1, size = 5)
 
 p3 <- ggplot(Total) +
   geom_polygon(
@@ -47,7 +47,7 @@ p3 <- ggplot(Total) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank()) +
   theme(plot.title = element_text(hjust = 0)) +
-  annotate("text", label = "c", x = -128, y = 49, vjust = 1, size = 5)
+  annotate("text", label = "(c)", x = -128, y = 49, vjust = 1, size = 5)
 
 
 combined_plots <- ggarrange(

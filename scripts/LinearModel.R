@@ -37,19 +37,21 @@ distances %>%
   geom_point() +
   geom_smooth()
 
-p1 <- distances %>%
+p2 <- distances %>%
   ggplot(aes(x = gamma,y = gamma_effect)) +
   geom_point(size = 3) +
   geom_line(aes(y = gamma_effect - resid), col = "royalblue") +
   theme_minimal() +
-  labs(y = "Change in beta diversity", x = "Size of the species pool")
+  labs(y = "Change in seasonal\nbeta-diversity", x = "Size of the species pool") +
+  ggtitle("(b)") + theme(plot.title = element_text(hjust = -0.45, vjust = -0))
 
-p2 <- distances %>%
+p1 <- distances %>%
   ggplot(aes(x = temp_range,y = temp_range_effect)) +
   geom_point(size = 3) +
   geom_line(aes(y = temp_range_effect - resid), col = "royalblue") +
   theme_minimal() +
-  labs(y = "Change in beta diversity", x = "Annual temperature range")
+  labs(y = "Change in seasonal\nbeta-diversity", x = "Annual temperature range") +
+  ggtitle("(a)") + theme(plot.title = element_text(hjust = -0.45, vjust = 0))
 
 library(gridExtra)
 g <- arrangeGrob(p1, p2, nrow = 2)
