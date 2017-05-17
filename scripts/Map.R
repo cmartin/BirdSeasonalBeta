@@ -21,5 +21,5 @@ p3 <- ggplot(Total) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
 
-ggsave(paste0("results/Fig1.eps"), p3, width = 0.75*8, height = 0.33*11)
+ggsave(paste0("results/Fig2.eps"), p3, width = 0.75*8, height = 0.33*11)
 

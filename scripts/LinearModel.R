@@ -55,8 +55,7 @@ p1 <- distances %>%
 
 library(gridExtra)
 g <- arrangeGrob(p1, p2, nrow = 2)
-ggsave("results/Fig2.eps", g, width = 3, height = 4.5)
-
+ggsave("results/Fig1.eps", g, width = 3, height = 4.5)
 
 # How is variance seperated between these components
 varpart(
