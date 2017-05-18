@@ -7,7 +7,7 @@ distances %>%
     value = value,
     alpha, gamma, prop_resident, log_state_area:temp_range
   ) %>%
-  ggplot(aes(x = value,y = d)) +
+  ggplot(aes(x = value,y = horn)) +
   geom_point() +
   geom_smooth() +
   facet_wrap(~var, scales = "free_x")

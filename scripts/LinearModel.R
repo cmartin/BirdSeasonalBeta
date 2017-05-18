@@ -6,7 +6,7 @@ library(vegan)
 distances <- read_csv("data/distances.csv") %>% filter(complete.cases(.))
 
 
-m <- lm(d~gamma+I(gamma^2)+temp_range+I(temp_range^2), data = distances)
+m <- lm(horn~gamma+I(gamma^2)+temp_range+I(temp_range^2), data = distances)
 summary(m)
 
 options(na.action = "na.fail")
@@ -15,7 +15,7 @@ d
 importance(d)
 
 # Best model is without gamma^2
-m2 <- lm(d~gamma+temp_range+I(temp_range^2), data = distances)
+m2 <- lm(horn~gamma+temp_range+I(temp_range^2), data = distances)
 summary(m2)
 
 sum(cooks.distance(m2) > 2)
@@ -59,7 +59,7 @@ ggsave("results/Fig1.eps", g, width = 3, height = 4.5)
 
 # How is variance seperated between these components
 varpart(
-  distances$d,
+  distances$horn,
   ~gamma+I(gamma^2),
   ~temp_range,
   data = distances

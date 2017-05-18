@@ -3,9 +3,13 @@ library(memoise)
 library(rebird)
 library(stringr)
 library(vegan)
+library(betapart)
+
 source("lib/EBird_Tools.R")
 source("lib/Monthly_Climate.R")
 source("lib/Horn.R")
+
+f <- calculate_frequencies("VT")
 
 distances <- map_df(
   state.abb,
@@ -17,8 +21,15 @@ distances <- map_df(
       d[i] <- 1 - horn2(f[,i],f[,i + 1])
     }
 
+    b <- bray.part(t(f))
+
+
+
     list(
-      d = mean(d),
+      horn = mean(d),
+      bray = mean(diag(as.matrix(b$bray)[-1,])),
+      turnover = mean(diag(as.matrix(b$bray.bal)[-1,])),
+      nestedness = mean(diag(as.matrix(b$bray.gra)[-1,])),
       location = x,
       alpha = mean(specnumber(t(f))),
       gamma = as.numeric(specnumber(t(f),1))

@@ -11,7 +11,7 @@ Total <- merge(
 
 p3 <- ggplot(Total) +
   geom_polygon(
-    aes(x = long, y = lat, group = group, fill = d),
+    aes(x = long, y = lat, group = group, fill = horn),
     colour = "white"
   ) +
   scale_fill_continuous(low = "thistle2", high = "darkgreen", guide = "colorbar") +
@@ -20,6 +20,6 @@ p3 <- ggplot(Total) +
   scale_y_continuous(breaks = c()) +
   scale_x_continuous(breaks = c()) +
   theme(panel.border = element_blank())
+p3
 
 ggsave(paste0("results/Fig2.eps"), p3, width = 0.75*8, height = 0.33*11)
-
