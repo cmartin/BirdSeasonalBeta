@@ -1,0 +1,69 @@
+---
+title: "Online Resource 1"
+output:
+  html_document:
+    highlight: haddock
+    theme: readable
+    toc: yes
+---
+```{r echo=FALSE}
+knitr::opts_chunk$set(comment = NA)
+```
+
+# Related article
+
+Article title : Bird seasonal beta-diversity in the contiguous United States
+
+Journal name : Journal of Ornithology
+
+Author name : Charles A. Martin
+
+Affiliation : Université du Québec à Trois-Rivières
+
+E-mail address : charles.martin1@uqtr.ca
+
+# Goal
+
+This online resource acts as an additional result to *Bird seasonal beta-diversity in the contiguous United States*, exploring the gamma:alpha ratio, as it was an important contributor to differences in beta-diversity along species pool size changes in Kraft et al. (2011).
+
+Gamma diversity is total number of species for a state in a 10-year period. Alpha diversity is the average number of species per week per state in a 10-year period.
+
+Data source is the same as in the related article (eBird frequency histograms from 2006 to 2016).
+
+# Data loading and preparation
+```{r message=FALSE}
+library(tidyverse)
+db <- read_csv("../data/distances.csv") %>%
+  filter(complete.cases(.)) %>% 
+  select(alpha, gamma, latitude, location) %>% 
+  gather(key = metric, value = diversity, alpha, gamma)
+```
+
+# Database excerpt
+```{r}
+db
+```
+
+# Graphical representation of the relationship
+Compare with Fig. 1A in Kraft et al. 2011
+```{r}
+db %>%
+  ggplot(aes(x = latitude, y = diversity, col = metric, shape = metric)) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(x = "Latitude", y = "Diversity") +
+  scale_color_manual(values = c("alpha" = "tomato", "gamma" = "royalblue"))
+```
+
+# Comparing models with and without the slope difference
+```{r}
+m1 <- lm(diversity~latitude * metric, data = db)
+m2 <- lm(diversity~latitude + metric, data = db)
+AIC(m1,m2) # Lower AIC = better model, i.e. no slope difference
+
+summary(m2)
+```
+
+# References
+Kraft NJ, Comita LS, Chase JM, et al (2011) Disentangling the Drivers of Beta Diversity Along Latidunial and Elevational Gradients. Science (80) 333:1755–1758. doi: 10.1007/s13398-014-0173-7.2
