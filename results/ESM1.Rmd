@@ -1,6 +1,11 @@
 ---
 title: "Online Resource 1"
 output:
+  pdf_document:
+    toc: yes
+    highlight: haddock
+    fig_width: 4
+    fig_height: 3
   html_document:
     highlight: haddock
     theme: readable
@@ -26,7 +31,7 @@ E-mail address : charles.martin1@uqtr.ca
 
 This online resource acts as an additional result to *Bird seasonal beta-diversity in the contiguous United States*, exploring the gamma:alpha ratio, as it was an important contributor to differences in beta-diversity along species pool size changes in Kraft et al. (2011).
 
-Gamma diversity is total number of species for a state in a 10-year period. Alpha diversity is the average number of species per week per state in a 10-year period.
+In our study, gamma diversity is total number of species for a state in a 10-year period. Alpha diversity is the average number of species per week per state in a 10-year period.
 
 Data source is the same as in the related article (eBird frequency histograms from 2006 to 2016).
 
@@ -56,7 +61,7 @@ db %>%
   scale_color_manual(values = c("alpha" = "tomato", "gamma" = "royalblue"))
 ```
 
-# Comparing models with and without the slope difference
+# Comparing models with and without slope differences
 ```{r}
 m1 <- lm(diversity~latitude * metric, data = db)
 m2 <- lm(diversity~latitude + metric, data = db)
