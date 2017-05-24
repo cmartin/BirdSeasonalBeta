@@ -9,8 +9,6 @@ source("lib/EBird_Tools.R")
 source("lib/Monthly_Climate.R")
 source("lib/Horn.R")
 
-f <- calculate_frequencies("VT")
-
 distances <- map_df(
   state.abb,
   function(x) {
