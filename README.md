@@ -58,6 +58,6 @@ loaded via a namespace (and not attached):
 
 # Additional acknowledgements
 
-As this paper was published as a short communication with a maximum of 15 references, it was not possible to ackowledge the quality of the R developers involved with the development and maintenance of all these wonderful packages with citations.
+As this paper was published as a short communication with a maximum of 15 references, it was not possible to ackowledge the quality of the R developers involved in the development and maintenance of all these wonderful packages with citations.
 
 Nevertheless, without your dedicated work, none of this would have been possible.

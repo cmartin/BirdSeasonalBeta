@@ -1,5 +1,4 @@
 library(tidyverse)
-library(egg)
 
 distances <- read_csv("data/distances.csv")
 

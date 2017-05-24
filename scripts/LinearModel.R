@@ -2,6 +2,7 @@ library(tidyverse)
 library(modelr)
 library(MuMIn)
 library(vegan)
+library(gridExtra)
 
 distances <- read_csv("data/distances.csv") %>% filter(complete.cases(.))
 
@@ -53,7 +54,6 @@ p1 <- distances %>%
   labs(y = "Change in seasonal\nbeta-diversity", x = "Annual temperature range") +
   ggtitle("(a)") + theme(plot.title = element_text(hjust = -0.45, vjust = 0))
 
-library(gridExtra)
 g <- arrangeGrob(p1, p2, nrow = 2)
 ggsave("results/Fig1.eps", g, width = 3, height = 4.5)
 

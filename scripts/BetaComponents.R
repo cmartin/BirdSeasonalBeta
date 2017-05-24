@@ -1,5 +1,7 @@
 # Exploring beta diversity components
 library(tidyverse)
+library(MuMIn)
+
 distances <- read_csv("data/distances.csv") %>% filter(complete.cases(.))
 
 # Bray-Curtis and Horn dissimilarity are mostly the same
@@ -35,7 +37,6 @@ distances %>%
   geom_smooth(method = "lm", formula = y~poly(x,2)) +
   facet_grid(part~explanatory_var, scales = "free_x")
 
-library(MuMIn)
 options(na.action = "na.fail")
 
 
